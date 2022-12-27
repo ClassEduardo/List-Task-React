@@ -1,11 +1,10 @@
 import { useState } from 'react';
-
 import { FaPlus, FaEdit, FaWindowClose } from 'react-icons/fa';
-
 import './Main.css'
 
 export default function Main() {
   const [ newTask, setNewTask ] = useState('');
+  const [ index, setIndex ] = useState(-1);
   const [ tasks, setTasks ] = useState([
       'Fazer café',
       'Beber água',
@@ -13,7 +12,6 @@ export default function Main() {
     ]
   );
 
-  
   const handleChange = (e) => {
       setNewTask(e.target.value);     
   }
@@ -21,7 +19,14 @@ export default function Main() {
   const handelSubmit = (e) => {
     e.preventDefault();
     if (tasks.indexOf(newTask) !== -1) return;
-    setTasks([ ...tasks, newTask ]);
+
+    if(index === -1) {
+      setTasks([ ...tasks, newTask ]);
+    } else {
+      tasks[index] = newTask;
+      setTasks([ ...tasks ]);
+      setIndex(-1);
+    }
     setNewTask('');
   }
 
@@ -31,9 +36,9 @@ export default function Main() {
     );
   }
 
-
-  function handleEdit(e, index) {
-    console.log('Edit' + index)
+  function handleEdit(ind) {
+    setNewTask(tasks[ind]);
+    setIndex(ind);
   }
 
   return (
@@ -57,7 +62,7 @@ export default function Main() {
           <li key={task}>
             {task}
             <span>
-              <FaEdit className="edit" onClick={(e) => handleEdit(e, index)} />
+              <FaEdit className="edit" onClick={() => handleEdit(index)} />
               <FaWindowClose className="delete" onClick={() => handleDelete(index)} />
             </span>
           </li>
