@@ -1,16 +1,27 @@
-import { useState } from 'react';
-import { FaPlus, FaEdit, FaWindowClose } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
+
+import Form from './Form/index.js'
+import Tarefas from './Tarefas/index.js';
+
 import './Main.css'
 
 export default function Main() {
   const [ newTask, setNewTask ] = useState('');
   const [ index, setIndex ] = useState(-1);
-  const [ tasks, setTasks ] = useState([
-      'Fazer café',
-      'Beber água',
-      'Estudar'
-    ]
-  );
+  const [ tasks, setTasks ] = useState([]);
+
+  useEffect(() => {
+    const tarefas = JSON.parse(localStorage.getItem('tarefas'));
+
+    if(!tarefas) return;
+
+    setTasks(tarefas);
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('tarefas', JSON.stringify(tasks));
+
+  }, [tasks])
 
   const handleChange = (e) => {
       setNewTask(e.target.value);     
@@ -35,7 +46,7 @@ export default function Main() {
       tasks.filter((task, i, arr) => arr.indexOf(task) !== index)
     );
   }
-
+ 
   function handleEdit(ind) {
     setNewTask(tasks[ind]);
     setIndex(ind);
@@ -45,29 +56,17 @@ export default function Main() {
     <div className="main">
       <h1>Task List</h1> 
 
-      <form onSubmit={handelSubmit} action="#" className="form">
-        <input
-          onChange={handleChange}
-          type="text"
-          value={newTask}
-        />
+      <Form 
+        handleChange={handleChange} 
+        handelSubmit={handelSubmit}
+        handleValue={newTask}
+      />
 
-        <button type="submit">
-          <FaPlus />
-        </button>
-      </form>
-
-      <ul className="tasks">
-        {tasks.map((task, index) => (
-          <li key={task}>
-            {task}
-            <span>
-              <FaEdit className="edit" onClick={() => handleEdit(index)} />
-              <FaWindowClose className="delete" onClick={() => handleDelete(index)} />
-            </span>
-          </li>
-        ))}
-      </ul>
+      <Tarefas 
+        tasks={tasks}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+      />
 
     </div>
   )

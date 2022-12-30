@@ -1,0 +1,22 @@
+.form {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form input[type="text"] {
+  height: 2.2rem;
+  padding: 0 2rem;
+  font-size: 1.6rem;
+  border: 1px solid #ccc;
+  min-width: 80%;
+}
+
+.form button[type="submit"] {
+  border: none;
+  height: 2.2rem;
+  width: 2.2rem;
+  cursor: pointer;
+  background-color: rgb(3, 209, 3);
+}
